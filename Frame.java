@@ -1,0 +1,7 @@
+import javax.swing.*;
+
+public class Frame extends JFrame {
+    Frame() {
+        this.add(new Panel());
+    }
+}
