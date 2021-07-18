@@ -55,6 +55,19 @@ public class Panel extends JPanel implements Runnable {
         super.paintComponent(g);
         draw(g);
     }
+    private void renderScore(Graphics g, Paddle p1, Paddle p2) {
+        g.setColor(Color.WHITE);
+        String score_left = Integer.toString(p1.score());
+        String score_right = Integer.toString(p2.score());
+
+        g.setFont(new Font("Arial", Font.BOLD, 20));
+        g.drawString(score_left, SCREEN_WIDTH / 2 - 50, 40);
+        g.drawString(score_right, SCREEN_WIDTH / 2 + 30, 40);
+    }
+    private void renderCenterLine(Graphics g) {
+        g.setColor(Color.WHITE);
+        for(int i = 0; i <= 19; i++) g.fillRect(SCREEN_WIDTH / 2 - 5, 15 * 2 * i, 5, 15);
+    }
     private void draw(Graphics g) {
         // render-paddles
         left.render(g);
@@ -62,6 +75,12 @@ public class Panel extends JPanel implements Runnable {
 
         // render-ball
         ball.render(g);
+
+        // render-center-line
+        renderCenterLine(g);
+
+        // render-score
+        renderScore(g, left, right);
     }
 
     // key-listener
@@ -104,8 +123,7 @@ public class Panel extends JPanel implements Runnable {
                 right.move(SCREEN_HEIGHT);
 
                 // ball-collisions
-                ball.collideWithEdges(SCREEN_WIDTH, SCREEN_HEIGHT);
-                ball.collideWithPaddles(left, right);
+                ball.collide(SCREEN_HEIGHT, left, right);
 
                 // repaint
                 repaint();

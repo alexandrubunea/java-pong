@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.awt.geom.Area;
 import java.util.Random;
 
 public class Ball extends Rectangle {
@@ -74,22 +73,26 @@ public class Ball extends Rectangle {
     }
 
     // collisions-with-the-edges
-    public void collideWithEdges(int SCREEN_LIMIT_WIDTH, int SCREEN_LIMIT_HEIGHT) {
+    public void collide(int SCREEN_LIMIT_HEIGHT, Paddle left, Paddle right) {
         // Y Axis
-        if(this.y - this.radius / 2 <= 0 && this.speedY < 0) this.speedY = -this.speedY;
-        if(this.y + this.radius / 2 >= SCREEN_LIMIT_HEIGHT && this.speedY > 0) this.speedY = -this.speedY;
+        if(this.centerY - this.radius / 2 <= 0 && this.speedY < 0) this.speedY = -this.speedY;
+        if(this.centerY + this.radius / 2 >= SCREEN_LIMIT_HEIGHT && this.speedY > 0) this.speedY = -this.speedY;
         // X Axis
-        if(this.x - this.radius / 2 <= 0 && this.speedX < 0) reset();
-        if(this.x + this.radius / 2 >= SCREEN_LIMIT_WIDTH && this.speedX > 0) reset();
-    }
+        if(this.centerX - this.radius / 2 <= left.centerX() - left.width() / 2 && this.speedX < 0){
+            reset();
+            right.increaseScore();
+        }
+        if(this.centerX + this.radius / 2 >= right.centerX() + right.width() / 2 && this.speedX > 0){
+            reset();
+            left.increaseScore();
+        }
 
-    // collisions-with-paddle
-    public void collideWithPaddles(Paddle left, Paddle right) {
+        // with the paddles
         // left paddle
         if(this.centerX - this.radius / 2 <= left.centerX() + left.width() / 2 &&
-        this.centerY + this.radius / 2 >= left.centerY() - left.height() / 2 &&
-        this.centerY - this.radius / 2 <= left.centerY() + left.height() / 2 &&
-        this.speedX < 0) {
+                this.centerY + this.radius / 2 > left.centerY() - left.height() / 2 &&
+                this.centerY - this.radius / 2 < left.centerY() + left.height() / 2 &&
+                this.speedX < 0) {
             double offsetY = left.centerY() - this.centerY;
             double ratioY = offsetY / ((double) left.height() / 2);
             double bounceAngle = Math.toRadians(75 * ratioY);
@@ -99,9 +102,9 @@ public class Ball extends Rectangle {
         }
         // right paddle
         if(this.centerX + this.radius / 2 >= right.centerX() - right.width() / 2 &&
-        this.centerY + this.radius / 2 >= right.centerY() - right.height() / 2 &&
-        this.centerY - this.radius / 2 <= right.centerY() + right.height() / 2 &&
-        this.speedX > 0) {
+                this.centerY + this.radius / 2 > right.centerY() - right.height() / 2 &&
+                this.centerY - this.radius / 2 < right.centerY() + right.height() / 2 &&
+                this.speedX > 0) {
             double offsetY = right.centerY() - this.centerY;
             double ratioY = offsetY / ((double) right.height() / 2);
             double bounceAngle = Math.toRadians(75 * ratioY);
@@ -110,9 +113,4 @@ public class Ball extends Rectangle {
             if(this.speedX == 0) this.speedX = -1;
         }
     }
-
-    // get-props
-    public int radius() { return this.radius; }
-    public int centerX() { return this.x; }
-    public int centerY() { return this.y; }
 }

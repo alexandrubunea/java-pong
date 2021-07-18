@@ -6,11 +6,11 @@ public class Paddle extends Rectangle {
 
     private final int x;
     private int y;
-    private final int initY;
     private final int width;
     private final int height;
     private final int centerX;
     private int centerY;
+    private int score;
     private char dir;
 
     // constructor
@@ -23,7 +23,7 @@ public class Paddle extends Rectangle {
         this.centerX = x + width / 2;
         this.centerY = y + height / 2;
 
-        this.initY = y;
+        this.score = 0;
 
         dir = 'S';
     }
@@ -47,9 +47,13 @@ public class Paddle extends Rectangle {
         g.fillRect(this.x, this.y, this.width, this.height);
     }
 
+    // score
+    public void increaseScore() { this.score ++; }
+
     // get-props
     public int centerX() { return this.centerX; }
     public int centerY() { return this.centerY; }
     public int height() { return this.height; }
     public int width() { return this.width; }
+    public int score() { return this.score; }
 }
