@@ -90,14 +90,24 @@ public class Ball extends Rectangle {
         this.centerY + this.radius / 2 >= left.centerY() - left.height() / 2 &&
         this.centerY - this.radius / 2 <= left.centerY() + left.height() / 2 &&
         this.speedX < 0) {
-            this.speedX = -this.speedX;
+            double offsetY = left.centerY() - this.centerY;
+            double ratioY = offsetY / ((double) left.height() / 2);
+            double bounceAngle = Math.toRadians(75 * ratioY);
+            this.speedX = (int) (this.velocityX * Math.cos(bounceAngle));
+            this.speedY = (int) -(this.velocityY * Math.sin(bounceAngle));
+            if(this.speedX == 0) this.speedX = 1;
         }
         // right paddle
         if(this.centerX + this.radius / 2 >= right.centerX() - right.width() / 2 &&
         this.centerY + this.radius / 2 >= right.centerY() - right.height() / 2 &&
         this.centerY - this.radius / 2 <= right.centerY() + right.height() / 2 &&
         this.speedX > 0) {
-            this.speedX = -this.speedX;
+            double offsetY = right.centerY() - this.centerY;
+            double ratioY = offsetY / ((double) right.height() / 2);
+            double bounceAngle = Math.toRadians(75 * ratioY);
+            this.speedX = (int) -(this.velocityX * Math.cos(bounceAngle));
+            this.speedY = (int) -(this.velocityY * Math.sin(bounceAngle));
+            if(this.speedX == 0) this.speedX = -1;
         }
     }
 

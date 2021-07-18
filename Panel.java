@@ -69,29 +69,17 @@ public class Panel extends JPanel implements Runnable {
         @Override
         public void keyPressed(KeyEvent e) {
             switch (e.getKeyCode()) {
-                case KeyEvent.VK_W -> {
-                    left.changeDirection('U');
-                }
-                case KeyEvent.VK_S -> {
-                    left.changeDirection('D');
-                }
-                case KeyEvent.VK_UP -> {
-                    right.changeDirection('U');
-                }
-                case KeyEvent.VK_DOWN -> {
-                    right.changeDirection('D');
-                }
+                case KeyEvent.VK_W -> left.changeDirection('U');
+                case KeyEvent.VK_S -> left.changeDirection('D');
+                case KeyEvent.VK_UP -> right.changeDirection('U');
+                case KeyEvent.VK_DOWN -> right.changeDirection('D');
             }
         }
         @Override
         public void keyReleased(KeyEvent e) {
             switch (e.getKeyCode()) {
-                case KeyEvent.VK_W, KeyEvent.VK_S -> {
-                    left.changeDirection('S');
-                }
-                case KeyEvent.VK_UP, KeyEvent.VK_DOWN -> {
-                    right.changeDirection('S');
-                }
+                case KeyEvent.VK_W, KeyEvent.VK_S -> left.changeDirection('S');
+                case KeyEvent.VK_UP, KeyEvent.VK_DOWN -> right.changeDirection('S');
             }
         }
     }
