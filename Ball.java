@@ -99,6 +99,7 @@ public class Ball extends Rectangle {
             this.speedX = (int) (this.velocityX * Math.cos(bounceAngle));
             this.speedY = (int) -(this.velocityY * Math.sin(bounceAngle));
             if(this.speedX == 0) this.speedX = this.velocityX;
+
         }
         // right paddle
         if(this.centerX + this.radius / 2 >= right.centerX() - right.width() / 2 &&

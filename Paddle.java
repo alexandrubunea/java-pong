@@ -72,6 +72,9 @@ public class Paddle extends Rectangle {
     // take-the-control-over-ai-paddle
     public void takeControl() { this.ai = !this.ai; }
 
+    // reset-score
+    public void resetScore() { this.score = 0; }
+
     // get-props
     public int centerX() { return this.centerX; }
     public int centerY() { return this.centerY; }

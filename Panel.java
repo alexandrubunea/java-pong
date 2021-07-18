@@ -108,19 +108,31 @@ public class Panel extends JPanel implements Runnable {
         public void keyPressed(KeyEvent e) {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_W -> {
-                    if(left.ai()) left.takeControl();
+                    if(left.ai()) {
+                        left.takeControl();
+                        left.resetScore();
+                    }
                     left.changeDirection('U');
                 }
                 case KeyEvent.VK_S -> {
-                    if(left.ai()) left.takeControl();
+                    if(left.ai()) {
+                        left.takeControl();
+                        left.resetScore();
+                    }
                     left.changeDirection('D');
                 }
                 case KeyEvent.VK_UP -> {
-                    if(right.ai()) right.takeControl();
+                    if(right.ai()) {
+                        right.takeControl();
+                        right.resetScore();
+                    }
                     right.changeDirection('U');
                 }
                 case KeyEvent.VK_DOWN -> {
-                    if(right.ai()) right.takeControl();
+                    if(right.ai()) {
+                        right.takeControl();
+                        right.resetScore();
+                    }
                     right.changeDirection('D');
                 }
             }
