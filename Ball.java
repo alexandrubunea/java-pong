@@ -98,7 +98,7 @@ public class Ball extends Rectangle {
             double bounceAngle = Math.toRadians(75 * ratioY);
             this.speedX = (int) (this.velocityX * Math.cos(bounceAngle));
             this.speedY = (int) -(this.velocityY * Math.sin(bounceAngle));
-            if(this.speedX == 0) this.speedX = 1;
+            if(this.speedX == 0) this.speedX = this.velocityX;
         }
         // right paddle
         if(this.centerX + this.radius / 2 >= right.centerX() - right.width() / 2 &&
@@ -110,7 +110,14 @@ public class Ball extends Rectangle {
             double bounceAngle = Math.toRadians(75 * ratioY);
             this.speedX = (int) -(this.velocityX * Math.cos(bounceAngle));
             this.speedY = (int) -(this.velocityY * Math.sin(bounceAngle));
-            if(this.speedX == 0) this.speedX = -1;
+            if(this.speedX == 0) this.speedX = -this.velocityX;
         }
     }
+
+    // get-props
+    public int centerY() { return this.centerY; }
+    public int centerX() { return this.centerX; }
+    public int height() { return this.height; }
+    public int width() { return this.width; }
+    public int speedX() { return this.speedX; }
 }

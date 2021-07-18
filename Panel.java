@@ -36,8 +36,8 @@ public class Panel extends JPanel implements Runnable {
     // game-init
     private void initGame() {
         // paddles
-        left = new Paddle(PADDLE_WIDTH, SCREEN_HEIGHT / 2 - PADDLE_HEIGHT / 2, PADDLE_WIDTH, PADDLE_HEIGHT);
-        right = new Paddle(SCREEN_WIDTH - 2 * PADDLE_WIDTH, SCREEN_HEIGHT / 2 - PADDLE_HEIGHT / 2, PADDLE_WIDTH, PADDLE_HEIGHT);
+        left = new Paddle(PADDLE_WIDTH, SCREEN_HEIGHT / 2 - PADDLE_HEIGHT / 2, PADDLE_WIDTH, PADDLE_HEIGHT, true, "left");
+        right = new Paddle(SCREEN_WIDTH - 2 * PADDLE_WIDTH, SCREEN_HEIGHT / 2 - PADDLE_HEIGHT / 2, PADDLE_WIDTH, PADDLE_HEIGHT, true, "right");
 
         // ball
         ball = new Ball(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, BALL_RADIUS, BALL_VELOCITY_X, BALL_VELOCITY_Y);
@@ -56,17 +56,33 @@ public class Panel extends JPanel implements Runnable {
         draw(g);
     }
     private void renderScore(Graphics g, Paddle p1, Paddle p2) {
-        g.setColor(Color.WHITE);
-        String score_left = Integer.toString(p1.score());
-        String score_right = Integer.toString(p2.score());
+        if(!p1.ai() || !p2.ai()) {
+            g.setColor(Color.WHITE);
+            String score_left = Integer.toString(p1.score());
+            String score_right = Integer.toString(p2.score());
 
-        g.setFont(new Font("Arial", Font.BOLD, 20));
-        g.drawString(score_left, SCREEN_WIDTH / 2 - 50, 40);
-        g.drawString(score_right, SCREEN_WIDTH / 2 + 30, 40);
+            g.setFont(new Font("Arial", Font.BOLD, 20));
+            g.drawString(score_left, SCREEN_WIDTH / 2 - 50, 40);
+            g.drawString(score_right, SCREEN_WIDTH / 2 + 30, 40);
+        }
     }
-    private void renderCenterLine(Graphics g) {
-        g.setColor(Color.WHITE);
-        for(int i = 0; i <= 19; i++) g.fillRect(SCREEN_WIDTH / 2 - 5, 15 * 2 * i, 5, 15);
+    private void renderInfoText(Graphics g, Paddle p1, Paddle p2) {
+        if(p1.ai() && p2.ai()) {
+            g.setColor(Color.ORANGE);
+            g.setFont(new Font("Arial", Font.BOLD, 40));
+            g.drawString("PONG", SCREEN_WIDTH / 2 - 60, SCREEN_HEIGHT / 2 - 180);
+            g.setFont(new Font("Arial", Font.BOLD, 16));
+            g.drawString("To start playing take control over one of the paddles!", SCREEN_WIDTH / 2 - 180, SCREEN_HEIGHT / 2 - 150);
+            g.drawString("To take control over the left paddle press W or S", SCREEN_WIDTH / 2 - 180, SCREEN_HEIGHT / 2 - 130);
+            g.drawString("and for the right one press UP or DOWN",SCREEN_WIDTH / 2 - 180, SCREEN_HEIGHT / 2 - 110);
+            g.drawString("You can take control over the both of them if you want!", SCREEN_WIDTH / 2 - 180, SCREEN_HEIGHT / 2 - 90);
+        }
+    }
+    private void renderCenterLine(Graphics g, Paddle p1, Paddle p2) {
+        if(!p1.ai() || !p2.ai()) {
+            g.setColor(Color.WHITE);
+            for (int i = 0; i <= 19; i++) g.fillRect(SCREEN_WIDTH / 2 - 5, 15 * 2 * i, 5, 15);
+        }
     }
     private void draw(Graphics g) {
         // render-paddles
@@ -77,10 +93,13 @@ public class Panel extends JPanel implements Runnable {
         ball.render(g);
 
         // render-center-line
-        renderCenterLine(g);
+        renderCenterLine(g, left, right);
 
         // render-score
         renderScore(g, left, right);
+
+        // render-info-text
+        renderInfoText(g, left, right);
     }
 
     // key-listener
@@ -88,10 +107,22 @@ public class Panel extends JPanel implements Runnable {
         @Override
         public void keyPressed(KeyEvent e) {
             switch (e.getKeyCode()) {
-                case KeyEvent.VK_W -> left.changeDirection('U');
-                case KeyEvent.VK_S -> left.changeDirection('D');
-                case KeyEvent.VK_UP -> right.changeDirection('U');
-                case KeyEvent.VK_DOWN -> right.changeDirection('D');
+                case KeyEvent.VK_W -> {
+                    if(left.ai()) left.takeControl();
+                    left.changeDirection('U');
+                }
+                case KeyEvent.VK_S -> {
+                    if(left.ai()) left.takeControl();
+                    left.changeDirection('D');
+                }
+                case KeyEvent.VK_UP -> {
+                    if(right.ai()) right.takeControl();
+                    right.changeDirection('U');
+                }
+                case KeyEvent.VK_DOWN -> {
+                    if(right.ai()) right.takeControl();
+                    right.changeDirection('D');
+                }
             }
         }
         @Override
@@ -107,7 +138,7 @@ public class Panel extends JPanel implements Runnable {
     @Override
     public void run() {
         long lastTime = System.nanoTime();
-        double amountOfTicks = 120.0;
+        double amountOfTicks = 144.0;
         double ns = 1000000000 / amountOfTicks;
         double delta = 0;
         while (true) {
@@ -119,8 +150,8 @@ public class Panel extends JPanel implements Runnable {
                 ball.move();
 
                 // paddles-movement
-                left.move(SCREEN_HEIGHT);
-                right.move(SCREEN_HEIGHT);
+                left.move(SCREEN_HEIGHT, SCREEN_WIDTH, ball);
+                right.move(SCREEN_HEIGHT, SCREEN_WIDTH, ball);
 
                 // ball-collisions
                 ball.collide(SCREEN_HEIGHT, left, right);
