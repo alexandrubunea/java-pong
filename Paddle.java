@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public class Paddle extends Rectangle {
+public class Paddle {
     // paddle-config
     private static final int PADDLE_VELOCITY = 7;
 
@@ -45,8 +45,8 @@ public class Paddle extends Rectangle {
             }
         } else {
             // this.height / 4 - because we want a small error to make everything more fun
-            if(!(this.centerY - this.height / 4 <= ball.centerY() + ball.height / 2 && this.centerY + this.height / 4 >= ball.centerY() - ball.height() / 2)) {
-                if((this.position && ball.centerX() + ball.width() / 2 >= SCREEN_LIMIT_WIDTH / 2 && ball.speedX() > 0) || (!this.position && ball.centerX() - ball.width() / 2 <= SCREEN_LIMIT_WIDTH / 2 && ball.speedX() < 0)) {
+            if(!(this.centerY - this.height / 4 <= ball.centerY() + ball.radius() / 2 && this.centerY + this.height / 4 >= ball.centerY() - ball.radius() / 2)) {
+                if((this.position && ball.centerX() + ball.radius() / 2 >= SCREEN_LIMIT_WIDTH / 2 && ball.speedX() > 0) || (!this.position && ball.centerX() - ball.radius() / 2 <= SCREEN_LIMIT_WIDTH / 2 && ball.speedX() < 0)) {
                     if (this.centerY >= ball.centerY() && this.y > 0) {
                         this.y -= PADDLE_VELOCITY;
                         this.centerY = this.y + this.height / 2;

@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.util.Random;
 
-public class Ball extends Rectangle {
+public class Ball {
     // ball-props
     private int x;
     private int y;
@@ -118,7 +118,6 @@ public class Ball extends Rectangle {
     // get-props
     public int centerY() { return this.centerY; }
     public int centerX() { return this.centerX; }
-    public int height() { return this.height; }
-    public int width() { return this.width; }
+    public int radius() { return this.radius; }
     public int speedX() { return this.speedX; }
 }
