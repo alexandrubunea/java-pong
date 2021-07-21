@@ -1,3 +1,2 @@
 # java-pong
-
-Simple Java Pong Game using Java AWT.
+Simple pong game made in Java using a simple AI in the start screen of the game.
